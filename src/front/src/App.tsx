@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { ActionsProps } from './components/Action';
 
 const AppContainer = styled.div`
-  background: antiquewhite;
   display: flex;
   flex-direction: column;
   height: 100vh
@@ -62,6 +61,7 @@ function App(){
       switch (data.type) {
         case 'start':
           setActions(data.actions);
+          fetchQueue();
           break;
         case 'actionConsumed':
           consumeAction(data.actionName);

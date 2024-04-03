@@ -12,9 +12,9 @@ const QueueText = styled.span`
     text-align: center;
 `;
 
-const QueueAction = styled.span`
+const QueueAction = styled.span<{ last: boolean, first: boolean }>`
     border-width: 1px;
-    border-color:rgb(119, 119, 120);
+    border-color: rgb(119, 119, 120);
     border-style: solid;
     width: 100px;
     line-height: 40px;
@@ -23,6 +23,9 @@ const QueueAction = styled.span`
     vertical-align: center;
     text-overflow: ellipsis;
     overflow: hidden;
+    background: #dde8e4;
+    ${props => props.last ? 'border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;' : ''}
+    ${props => props.first ? 'border-top-left-radius: 20px; border-top-right-radius: 20px;' : ''}
 `;
 
 type Props = {
@@ -35,7 +38,11 @@ const QueueFIFO = ({ queueContent }: Props) => {
                 <>
                     <QueueText>First-Out</QueueText>
                         {queueContent.map((action, index) => (
-                            <QueueAction key={index}>{action}</QueueAction>
+                            <QueueAction
+                              key={index}
+                              last={queueContent.length-1 === index}
+                              first={index === 0}
+                            >{action}</QueueAction>
                         ))}
                     <QueueText>Last-Out</QueueText>
                 </>

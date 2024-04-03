@@ -2,11 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.4);
   display: inline-block;
   padding: 5px;
   text-align: center;
-  width: 400px;`;
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+`;
 
 const Col = styled.div`
   width: 50%;
@@ -29,7 +32,7 @@ export const Timer = ({deadline, timeToStart , title}: Props) => {
   const currentTime = timeToStart;
 
   const convertTimeValue = (time: number) => {
-    return time <= 0 ? "--" : time < 10 ? "0" + time : time;
+    return time < 0 ? "--" : time;
   };
 
   React.useEffect(() => {
