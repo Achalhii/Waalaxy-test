@@ -8,18 +8,18 @@ import { ActionsProps } from './components/Action';
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh
-`
+  height: 100vh;
+`;
 const Title = styled.h1`
   text-align: center;
   padding: 10px;
-`
+`;
 
 const TimerContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   margin: 10px;
-`
+`;
 const Content = styled.div`
   width: 100%;
   display: flex;
@@ -42,7 +42,7 @@ const SecondPanel = styled.div`
   flex-direction: column;
 `;
 
-function App(){
+function App() {
   const [queueContent, setQueueContent] = useState<string[]>([]);
   const [actions, setActions] = useState<ActionsProps[]>([]);
   const [socket, setSocket] = useState<WebSocket>();
@@ -55,8 +55,8 @@ function App(){
     setSocket(new WebSocket(process.env.REACT_APP_WS_URL as string));
   }, []);
 
-  if(socket) {
-    socket.onmessage = (event) => {
+  if (socket) {
+    socket.onmessage = event => {
       const data = JSON.parse(event.data);
       switch (data.type) {
         case 'start':
@@ -65,7 +65,7 @@ function App(){
           break;
         case 'actionConsumed':
           consumeAction(data.actionName);
-          fetchQueue()
+          fetchQueue();
           break;
         case 'refreshQueue':
           fetchQueue();
@@ -80,7 +80,7 @@ function App(){
     };
     socket.onerror = () => {
       alert('Impossible de se connecter au serveur');
-    }
+    };
   }
 
   const fetchQueue = async () => {
@@ -88,33 +88,33 @@ function App(){
     const formattedResponse = await response.json();
     if (Array.isArray(formattedResponse?.queue)) {
       setQueueContent(formattedResponse.queue);
-      }
+    }
   };
 
   const consumeAction = (actionName: string) => {
-    const newActions = actions.map((action : ActionsProps) => {
-      if(action.name === actionName){
+    const newActions = actions.map((action: ActionsProps) => {
+      if (action.name === actionName) {
         action.creditAvailable -= 1;
       }
       return action;
     });
     setActions(newActions);
     setTimers({ timer1: Date.now(), timer2: timers.timer2 });
-  }
+  };
 
   return (
     <AppContainer>
       <Title>Test Waalaxy</Title>
       <TimerContainer>
-        <Timer deadline={15} timeToStart={timers.timer1} title={"Temps restant avant l'execution de la prochaine action"}/>
-        <Timer deadline={15*60} timeToStart={timers.timer2}  title={"Temps restant avant la recuperation de vos credits"} />
+        <Timer deadline={15} timeToStart={timers.timer1} title={"Temps restant avant l'execution de la prochaine action"} />
+        <Timer deadline={15 * 60} timeToStart={timers.timer2} title={'Temps restant avant la recuperation de vos credits'} />
       </TimerContainer>
       <Content>
         <Panel>
-          <QueueFIFO queueContent={queueContent}/>
+          <QueueFIFO queueContent={queueContent} />
         </Panel>
         <SecondPanel>
-          <ActionForm actions={actions}/>
+          <ActionForm actions={actions} />
         </SecondPanel>
       </Content>
     </AppContainer>

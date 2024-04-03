@@ -32,7 +32,7 @@ export class FifoActionScheduler {
    * @param name The name of the action
    * @returns {Action} The action with the given name
    */
-  getActionsByName(name : string) : Action {
+  getActionsByName(name: string): Action {
     const action = this.actionsAvailable.find(action => action.name === name);
     if (!action) {
       throw new Error('Action not found');
@@ -40,16 +40,18 @@ export class FifoActionScheduler {
     return action;
   }
 
-  getActionsAvailableJSON() : Array<{name: string, maxCredits: number}> {
-    return this.actionsAvailable.map(action => {return { name: action.name,maxCredits: action.maxCredits}});
+  getActionsAvailableJSON(): Array<{ name: string; maxCredits: number }> {
+    return this.actionsAvailable.map(action => {
+      return { name: action.name, maxCredits: action.maxCredits };
+    });
   }
 
-  addAction(action: Action) : void {
+  addAction(action: Action): void {
     this.queue.add(action);
     this.events.emit('addAction');
   }
 
-  getActionsAvailableName() : string[]{
+  getActionsAvailableName(): string[] {
     return this.actionsAvailable.map(action => action.name);
   }
 }
