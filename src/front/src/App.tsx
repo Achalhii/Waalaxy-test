@@ -46,23 +46,24 @@ const SecondPanel = styled.div`
 function App(){
   const [queueContent, setQueueContent] = useState<string[]>([]);
   const [actions, setActions] = useState<ActionsProps[]>([]);
+  const [socket, setSocket] = useState<WebSocket>();
   const [timers, setTimers] = useState({
     timer1: 0,
     timer2: Date.now()
   });
 
   useEffect(() => {
-    fetchQueue();
-    const socket = new WebSocket(process.env.REACT_APP_WS_URL as string);
+    setSocket(new WebSocket(process.env.REACT_APP_WS_URL as string));
+  }, []);
+
+  if(socket) {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       switch (data.type) {
         case 'start':
-          console.log("start", data.actions);
           setActions(data.actions);
           break;
         case 'actionConsumed':
-          console.log(data);
           consumeAction(data.actionName);
           fetchQueue()
           break;
@@ -70,7 +71,6 @@ function App(){
           fetchQueue();
           break;
         case 'resetCredits':
-          console.log('resetCredits', data.actions);
           setActions(data.actions);
           setTimers({ timer1: timers.timer1, timer2: Date.now() });
           break;
@@ -81,8 +81,7 @@ function App(){
     socket.onerror = () => {
       alert('Impossible de se connecter au serveur');
     }
-    // eslint-disable-next-line
-  }, []);
+  }
 
   const fetchQueue = async () => {
     const response = await fetch(process.env.REACT_APP_API_URL + '/queue');
@@ -93,20 +92,16 @@ function App(){
   };
 
   const consumeAction = (actionName: string) => {
-    console.log('consume action', actions)
-    if(actions.length === 0) return;
     const newActions = actions.map((action : ActionsProps) => {
       if(action.name === actionName){
         action.creditAvailable -= 1;
       }
       return action;
     });
-    console.log("newActions",newActions);
     setActions(newActions);
     setTimers({ timer1: Date.now(), timer2: timers.timer2 });
   }
 
-  console.log("actions", actions);
   return (
     <AppContainer>
       <Title>Test Waalaxy</Title>
