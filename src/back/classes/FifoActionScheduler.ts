@@ -1,20 +1,21 @@
 import { EventEmitter } from 'node:events';
-import { Action } from '~~/classes/Action';
-import { FIFOActionQueue } from '~~/classes/FIFOActionQueue';
+import { Action } from '../classes/Action';
+import { FifoActionQueue } from '../classes/FifoActionQueue';
 
 export class FifoActionScheduler {
   private actionsAvailable: Array<Action> = [];
-  queue: FIFOActionQueue;
+  queue: FifoActionQueue;
   timeToExecute: number = 0;
   events: EventEmitter;
+  intervalId: NodeJS.Timeout;
 
   constructor(actionsAvailable: Array<Action>, timeToExecute: number) {
     this.actionsAvailable = actionsAvailable;
     this.timeToExecute = timeToExecute;
-    this.queue = new FIFOActionQueue();
+    this.queue = new FifoActionQueue();
     this.events = new EventEmitter();
     console.log('FifoActionScheduler created');
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.consumeAction();
     }, this.timeToExecute);
   }
@@ -53,5 +54,9 @@ export class FifoActionScheduler {
 
   getActionsAvailableName(): string[] {
     return this.actionsAvailable.map(action => action.name);
+  }
+
+  stopScheduler() {
+    clearInterval(this.intervalId);
   }
 }

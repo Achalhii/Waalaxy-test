@@ -1,6 +1,6 @@
-import { Action } from '~~/classes/Action';
+import { Action } from '../classes/Action';
 
-export class FIFOActionQueue {
+export class FifoActionQueue {
   queue: Action[];
   constructor() {
     this.queue = [];

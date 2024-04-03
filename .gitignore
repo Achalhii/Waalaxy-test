@@ -1,1 +1,3 @@
 /node_modules
+/src/front/node_modules
+/src/back/node_modules

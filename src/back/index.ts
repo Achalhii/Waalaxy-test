@@ -1,13 +1,13 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import { Action } from '~~/classes/Action';
-import { FifoActionScheduler } from '~~/classes/FifoActionScheduler';
+import { Action } from './classes/Action';
+import { FifoActionScheduler } from './classes/FifoActionScheduler';
 import WebSocket from 'ws';
 import * as http from 'http';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const app = express();
+export const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server: server });
 
@@ -72,6 +72,11 @@ function generateActionWithRandomCredits(actions: Array<Action>) {
     return { ...action, creditAvailable: Math.round((Math.random() * 0.2 + 0.8) * action.maxCredits) };
   });
 }
+
 server.listen(process.env.PORT);
 
+export function closeServer() {
+  fifoActionScheduler.stopScheduler();
+  server.close();
+}
 console.info(`Server started on port ${process.env.PORT}`);
