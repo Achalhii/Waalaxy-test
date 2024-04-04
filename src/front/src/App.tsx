@@ -34,7 +34,6 @@ const Panel = styled.div`
   justify-content: center;
   width: 50%;
   flex-grow: 1;
-  overflow-y: scroll;
 `;
 
 const SecondPanel = styled.div`
