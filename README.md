@@ -2,7 +2,7 @@
 
 ## Back
 
-Go on src/back and run the following commands:
+Go on `src/back` and run the following commands:
 
 ### `npm i`
 
@@ -12,7 +12,7 @@ Go on src/back and run the following commands:
 
 ## Front
 
-Go on src/front and run the following commands:
+Go on `src/front` and run the following commands:
 
 ### `npm i`
 
