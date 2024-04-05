@@ -14,7 +14,7 @@ export class FifoActionScheduler {
     this.timeToExecute = timeToExecute;
     this.queue = new FifoActionQueue();
     this.events = new EventEmitter();
-    console.log('FifoActionScheduler created');
+    console.info('FifoActionScheduler created');
     this.intervalId = setInterval(() => {
       this.consumeAction();
     }, this.timeToExecute);

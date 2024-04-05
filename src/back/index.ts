@@ -5,6 +5,7 @@ import { FifoActionScheduler } from './classes/FifoActionScheduler';
 import WebSocket from 'ws';
 import * as http from 'http';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 export const app = express();
@@ -18,7 +19,6 @@ const fifoActionScheduler = new FifoActionScheduler([new Action('A', 10), new Ac
 
 wss.on('connection', ws => {
   console.info('new Client connected');
-
   ws.send(
     JSON.stringify({
       type: 'start',
@@ -47,18 +47,9 @@ wss.on('connection', ws => {
   );
 });
 
-app.post('/add-to-queue', (req: Request, res: Response) => {
-  const actionName = req.body.name;
-  if (typeof actionName !== 'string') {
-    return res.status(402).send('Bad Request');
-  }
-  try {
-    const action = fifoActionScheduler.getActionsByName(actionName);
-    fifoActionScheduler.addAction(action);
-    return res.send();
-  } catch (e) {
-    return res.status(404).send('Action not found');
-  }
+app.post('/add-to-queue', getActionNameMiddleware, (req: Request, res: Response) => {
+    fifoActionScheduler.addAction(req.body.action);
+    return res.send("Action added to queue");
 });
 
 app.get('/queue', (req: Request, res: Response) => {
@@ -73,10 +64,24 @@ function generateActionWithRandomCredits(actions: Array<Action>) {
   });
 }
 
-server.listen(process.env.PORT);
+server.listen(process.env.PORT, () => {
+  console.info(`Server started on port ${process.env.PORT}`);
+});
 
 export function closeServer() {
   fifoActionScheduler.stopScheduler();
   server.close();
 }
-console.info(`Server started on port ${process.env.PORT}`);
+
+function getActionNameMiddleware(req: Request, res: Response, next: Function) {
+  const actionName = req.body.name
+  if (typeof actionName !== 'string') {
+    return res.status(402).send('Bad Request');
+  }
+  try{
+    req.body.action = fifoActionScheduler.getActionsByName(actionName);
+  }catch (e) {
+    return res.status(404).send('Action not found');
+  }
+  next();
+}
