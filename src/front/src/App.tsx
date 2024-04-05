@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import QueueFIFO from './components/QueueFIFO';
 import ActionForm from './components/ActionForm';
 import { Timer } from './components/Timer';
-import styled, {createGlobalStyle} from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { ActionsProps } from './components/Action';
 
 const GlobalStyle = createGlobalStyle`
@@ -39,7 +39,7 @@ const WalaxyLogo = styled.img`
 `;
 
 interface PanelProps {
-  border: boolean
+  border: boolean;
 }
 
 const Panel = styled.div<PanelProps>`
@@ -47,7 +47,9 @@ const Panel = styled.div<PanelProps>`
   justify-content: center;
   flex: 1;
 
-  ${props => props?.border && `
+  ${props =>
+    props?.border &&
+    `
     border-right: 1px solid gray;
   `}
 `;
@@ -121,9 +123,11 @@ function App() {
 
   return (
     <>
-      <GlobalStyle/>
+      <GlobalStyle />
       <AppContainer>
-        <Title>Test <WalaxyLogo src="https://www.waalaxy.com/wp-content/uploads/2021/10/Wlx-logo-2.0-NAMEALIEN-Blue.png"></WalaxyLogo></Title>
+        <Title>
+          Test <WalaxyLogo src="https://www.waalaxy.com/wp-content/uploads/2021/10/Wlx-logo-2.0-NAMEALIEN-Blue.png"></WalaxyLogo>
+        </Title>
         <TimerContainer>
           <Timer deadline={15} timeToStart={timers.timer1} title={"Temps restant avant l'execution de la prochaine action"} />
           <Timer deadline={15 * 60} timeToStart={timers.timer2} title={'Temps restant avant la recuperation de vos credits'} />

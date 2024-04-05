@@ -37,7 +37,13 @@ const AddButton = styled.button`
   font-weight: 700;
   color: white;
 
-  background-image: linear-gradient(302deg,rgb(38,211,185) 0%,rgb(84,193,246) 28%,rgb(49,90,231) 77%,rgb(62,51,237) 100%) !important
+  background-image: linear-gradient(
+    302deg,
+    rgb(38, 211, 185) 0%,
+    rgb(84, 193, 246) 28%,
+    rgb(49, 90, 231) 77%,
+    rgb(62, 51, 237) 100%
+  ) !important;
 `;
 
 type Props = {
@@ -59,7 +65,7 @@ const ActionForm = ({ actions }: Props) => {
         'Content-Type': 'application/json'
       }
     });
-  }
+  };
 
   return (
     <Main>
@@ -67,8 +73,13 @@ const ActionForm = ({ actions }: Props) => {
       <ActionContainer>
         {actions.length > 0 ? (
           actions.map((action, index) => (
-            <div key={index} onClick={() => {setNameOfActionSelected(action.name)}}>
-                <Action checked={nameOfActionSelected === action.name} {...action} />
+            <div
+              key={index}
+              onClick={() => {
+                setNameOfActionSelected(action.name);
+              }}
+            >
+              <Action checked={nameOfActionSelected === action.name} {...action} />
             </div>
           ))
         ) : (
@@ -76,11 +87,7 @@ const ActionForm = ({ actions }: Props) => {
         )}
       </ActionContainer>
       <div>
-        <AddButton
-          onClick={addToQueue}
-        >
-          Ajouter
-        </AddButton>
+        <AddButton onClick={addToQueue}>Ajouter</AddButton>
       </div>
     </Main>
   );

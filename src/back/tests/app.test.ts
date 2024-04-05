@@ -8,23 +8,17 @@ describe('Test app', () => {
 
   describe('POST /add-to-queue', () => {
     it('should add an action to the queue', async () => {
-      const res = await request(app)
-        .post('/add-to-queue')
-        .send({ name: 'A' });
+      const res = await request(app).post('/add-to-queue').send({ name: 'A' });
       expect(res.status).toBe(200);
     });
 
     it('should return 402 for bad request', async () => {
-      const res = await request(app)
-        .post('/add-to-queue')
-        .send({ name: 123 }); // Sending a non-string value
+      const res = await request(app).post('/add-to-queue').send({ name: 123 }); // Sending a non-string value
       expect(res.status).toBe(402);
     });
 
     it('should return 404 for action not found', async () => {
-      const res = await request(app)
-        .post('/add-to-queue')
-        .send({ name: 'D' }); // Assuming 'D' is not in the available actions
+      const res = await request(app).post('/add-to-queue').send({ name: 'D' }); // Assuming 'D' is not in the available actions
       expect(res.status).toBe(404);
     });
   });

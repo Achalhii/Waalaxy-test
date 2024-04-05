@@ -3,10 +3,7 @@ import { Action } from '../classes/Action';
 
 describe('FifoActionScheduler', () => {
   let actionScheduler: FifoActionScheduler;
-  const actionsAvailable = [
-    new Action('Action 1', 50),
-    new Action('Action 2', 75),
-  ];
+  const actionsAvailable = [new Action('Action 1', 50), new Action('Action 2', 75)];
   beforeEach(() => {
     jest.useFakeTimers();
     actionScheduler = new FifoActionScheduler(actionsAvailable, 1000);
@@ -26,7 +23,7 @@ describe('FifoActionScheduler', () => {
     const actionsJSON = actionScheduler.getActionsAvailableJSON();
     expect(actionsJSON).toEqual([
       { name: 'Action 1', maxCredits: 50 },
-      { name: 'Action 2', maxCredits: 75 },
+      { name: 'Action 2', maxCredits: 75 }
     ]);
   });
 

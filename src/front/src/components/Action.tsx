@@ -35,12 +35,11 @@ export type ActionsProps = {
 
 const Action = ({ name, creditAvailable, maxCredits, checked }: ActionsProps) => {
   return (
-    <Content checked={checked}> 
+    <Content checked={checked}>
       <span>Action: {name}</span>
-      <br/>
+      <br />
       <span>
-        {creditAvailable}
-        / <MaxCredit>{maxCredits}</MaxCredit>
+        {creditAvailable}/ <MaxCredit>{maxCredits}</MaxCredit>
       </span>
     </Content>
   );

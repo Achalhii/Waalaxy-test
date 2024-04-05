@@ -48,8 +48,8 @@ wss.on('connection', ws => {
 });
 
 app.post('/add-to-queue', getActionNameMiddleware, (req: Request, res: Response) => {
-    fifoActionScheduler.addAction(req.body.action);
-    return res.send("Action added to queue");
+  fifoActionScheduler.addAction(req.body.action);
+  return res.send('Action added to queue');
 });
 
 app.get('/queue', (req: Request, res: Response) => {
@@ -74,13 +74,13 @@ export function closeServer() {
 }
 
 function getActionNameMiddleware(req: Request, res: Response, next: Function) {
-  const actionName = req.body.name
+  const actionName = req.body.name;
   if (typeof actionName !== 'string') {
     return res.status(402).send('Bad Request');
   }
-  try{
+  try {
     req.body.action = fifoActionScheduler.getActionsByName(actionName);
-  }catch (e) {
+  } catch (e) {
     return res.status(404).send('Action not found');
   }
   next();
