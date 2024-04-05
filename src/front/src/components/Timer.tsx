@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -20,11 +20,21 @@ const Box = styled.div`
   font-weight: 500;
   padding: 5px;
 `;
+
 type Props = {
   deadline: number;
   timeToStart: number;
   title: string;
 };
+
+const Main = styled.div`
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export const Timer = ({ deadline, timeToStart, title }: Props) => {
   const [minutes, setMinutes] = React.useState(0);
   const [seconds, setSeconds] = React.useState(0);
@@ -35,7 +45,7 @@ export const Timer = ({ deadline, timeToStart, title }: Props) => {
     return time < 0 ? '--' : time;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const getTime = (deadline: number) => {
       const time = currentTime + deadline * 1000 - Date.now();
       setMinutes(Math.floor((time / 1000 / 60) % 60));
@@ -46,7 +56,7 @@ export const Timer = ({ deadline, timeToStart, title }: Props) => {
   }, [deadline, currentTime]);
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <Main>
       <h3>{title}</h3>
       <Container role="timer">
         <Col>
@@ -62,6 +72,6 @@ export const Timer = ({ deadline, timeToStart, title }: Props) => {
           </Box>
         </Col>
       </Container>
-    </div>
+    </Main>
   );
 };

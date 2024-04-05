@@ -2,43 +2,61 @@ import React, { useEffect, useState } from 'react';
 import QueueFIFO from './components/QueueFIFO';
 import ActionForm from './components/ActionForm';
 import { Timer } from './components/Timer';
-import styled from 'styled-components';
+import styled, {createGlobalStyle} from 'styled-components';
 import { ActionsProps } from './components/Action';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background: #d8efff;
+  }
+
+  * {
+    font-family: Poppins, sans-serif;
+  }
+`;
 
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  align-items: center;
+  gap: 20px;
 `;
+
 const Title = styled.h1`
   text-align: center;
-  padding: 10px;
+  margin: 0;
 `;
 
 const TimerContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
-  margin: 10px;
+  width: 100%;
+  flex-wrap: wrap;
 `;
+
+const WalaxyLogo = styled.img`
+  width: 100px;
+`;
+
+interface PanelProps {
+  border: boolean
+}
+
+const Panel = styled.div<PanelProps>`
+  display: flex;
+  justify-content: center;
+  flex: 1;
+
+  ${props => props?.border && `
+    border-right: 1px solid gray;
+  `}
+`;
+
 const Content = styled.div`
   width: 100%;
   display: flex;
-  height: 85vh;
   border-top: 1px solid rgba(82, 81, 81, 0.55);
   padding-top: 20px;
-`;
-
-const Panel = styled.div`
-  border-right: 1px solid rgba(82, 81, 81, 0.55);
-  display: flex;
-  justify-content: center;
-  width: 50%;
-  flex-grow: 1;
-`;
-
-const SecondPanel = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 function App() {
@@ -102,21 +120,24 @@ function App() {
   };
 
   return (
-    <AppContainer>
-      <Title>Test Waalaxy</Title>
-      <TimerContainer>
-        <Timer deadline={15} timeToStart={timers.timer1} title={"Temps restant avant l'execution de la prochaine action"} />
-        <Timer deadline={15 * 60} timeToStart={timers.timer2} title={'Temps restant avant la recuperation de vos credits'} />
-      </TimerContainer>
-      <Content>
-        <Panel>
-          <QueueFIFO queueContent={queueContent} />
-        </Panel>
-        <SecondPanel>
-          <ActionForm actions={actions} />
-        </SecondPanel>
-      </Content>
-    </AppContainer>
+    <>
+      <GlobalStyle/>
+      <AppContainer>
+        <Title>Test <WalaxyLogo src="https://www.waalaxy.com/wp-content/uploads/2021/10/Wlx-logo-2.0-NAMEALIEN-Blue.png"></WalaxyLogo></Title>
+        <TimerContainer>
+          <Timer deadline={15} timeToStart={timers.timer1} title={"Temps restant avant l'execution de la prochaine action"} />
+          <Timer deadline={15 * 60} timeToStart={timers.timer2} title={'Temps restant avant la recuperation de vos credits'} />
+        </TimerContainer>
+        <Content>
+          <Panel border>
+            <QueueFIFO queueContent={queueContent} />
+          </Panel>
+          <Panel border={false}>
+            <ActionForm actions={actions} />
+          </Panel>
+        </Content>
+      </AppContainer>
+    </>
   );
 }
 

@@ -1,18 +1,43 @@
 import styled from 'styled-components';
-import React from 'react';
+import { useState } from 'react';
 import Action from './Action';
-
-const ActionContainer = styled.div`
-  display: inline-block;
-  margin: 50px;
-`;
 
 const Span = styled.span`
   font-size: 20px;
   justify-content: center;
 `;
-const ActionInput = styled.input`
-  display: none;
+
+const Main = styled.div`
+  justify-content: start;
+  text-align: center;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ActionContainer = styled.div`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+
+const AddButton = styled.button`
+  border: none;
+  height: 50px;
+  padding: 22px 40px 22px 40px;
+  border-radius: 12px;
+  background-color: #86cdf0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  color: white;
+
+  background-image: linear-gradient(302deg,rgb(38,211,185) 0%,rgb(84,193,246) 28%,rgb(49,90,231) 77%,rgb(62,51,237) 100%) !important
 `;
 
 type Props = {
@@ -22,49 +47,42 @@ type Props = {
     maxCredits: number;
   }[];
 };
+
 const ActionForm = ({ actions }: Props) => {
-  const [nameOfActionSelected, setNameOfActionSelected] = React.useState('');
+  const [nameOfActionSelected, setNameOfActionSelected] = useState('');
+
+  const addToQueue = async () => {
+    await fetch(process.env.REACT_APP_API_URL + '/add-to-queue', {
+      method: 'POST',
+      body: JSON.stringify({ name: nameOfActionSelected }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
   return (
-    <div style={{ textAlign: 'center' }}>
+    <Main>
       <Span>Ajouter une action</Span>
-      <br />
-      {actions.length > 0 ? (
-        actions.map((action, index) => (
-          <ActionContainer key={index}>
-            <label htmlFor={action.name}>
-              <Action checked={nameOfActionSelected === action.name} {...action} />
-            </label>
-            <ActionInput
-              id={action.name}
-              name="actionToChoose"
-              type="radio"
-              value={action.name}
-              onInput={e => {
-                setNameOfActionSelected(e.currentTarget.value);
-              }}
-            />
-          </ActionContainer>
-        ))
-      ) : (
-        <span>Pas d'action disponible</span>
-      )}
+      <ActionContainer>
+        {actions.length > 0 ? (
+          actions.map((action, index) => (
+            <div key={index} onClick={() => {setNameOfActionSelected(action.name)}}>
+                <Action checked={nameOfActionSelected === action.name} {...action} />
+            </div>
+          ))
+        ) : (
+          <span>Pas d'action disponible</span>
+        )}
+      </ActionContainer>
       <div>
-        <button
-          type="submit"
-          onClick={async () => {
-            await fetch(process.env.REACT_APP_API_URL + '/add-to-queue', {
-              method: 'POST',
-              body: JSON.stringify({ name: nameOfActionSelected }),
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            });
-          }}
+        <AddButton
+          onClick={addToQueue}
         >
           Ajouter
-        </button>
+        </AddButton>
       </div>
-    </div>
+    </Main>
   );
 };
 
