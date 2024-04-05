@@ -73,7 +73,7 @@ export function closeServer() {
   server.close();
 }
 
-function getActionNameMiddleware(req: Request, res: Response, next: Function) {
+function getActionNameMiddleware(req: Request, res: Response, next: () => void) {
   const actionName = req.body.name;
   if (typeof actionName !== 'string') {
     return res.status(402).send('Bad Request');
